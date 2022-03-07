@@ -20,9 +20,9 @@ public class EventCategoryController {
     private EventCategoryRepository eventCategoryRepository;
 
     @GetMapping("index")
-    public String displayAllEvents(Model model) {
+    public String displayAllEventCategories(Model model) {
         model.addAttribute("title", "All Categories");
-        model.addAttribute("categories", eventCategoryRepository.findAll());
+        model.addAttribute("eventCategories", eventCategoryRepository.findAll());
         return "eventCategories/index";
     }
 
@@ -35,14 +35,12 @@ public class EventCategoryController {
     }
 
     @PostMapping("create")
-    public String processCreateEventCategoryForm(@ModelAttribute @Valid EventCategory newCategory, Model model, Errors errors) {
+    public String processCreateEventCategoryForm(@ModelAttribute @Valid EventCategory newEventCategory, Errors errors, Model model) {
         if (errors.hasErrors()) {
             model.addAttribute("title", "Create a Category");
-            model.addAttribute("errorMsg", "Something's not right...please check your entries.");
             return ("eventCategories/create");
         }
-        model.addAttribute("title", "Create a Category");
-        model.addAttribute("newCategory", "New Category");
+        eventCategoryRepository.save(newEventCategory);
         return "eventCategories/index";
     }
 }
